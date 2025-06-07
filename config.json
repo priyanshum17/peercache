@@ -1,0 +1,6 @@
+{
+    "NETWORK_DATA_PATH": "state/network.json",
+    "NETWORKS_FOLDER_PATH": "state/network/",
+    "PEER_FOLDER_PATH": "state/peer/"
+
+}
