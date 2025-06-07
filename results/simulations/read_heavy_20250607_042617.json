@@ -1,0 +1,51 @@
+{
+  "config": {
+    "name": "read_heavy",
+    "peers": 8,
+    "memory_mb": 32,
+    "value_size": 16384,
+    "ghost_ratio": 0.0,
+    "ttl_ratio": 0.0,
+    "scenarios": [
+      [
+        4,
+        1000
+      ],
+      [
+        8,
+        2000
+      ]
+    ],
+    "seed": 42
+  },
+  "stages": [
+    {
+      "workers": 4,
+      "reqs": 1000,
+      "ops": 8000,
+      "dur": 6.204775916994549,
+      "thr": 1289.329398357228,
+      "lat_avg": 3089.9429503526485,
+      "lat_p95": 4407.208,
+      "hits": 3231,
+      "misses": 0,
+      "hit_rate": 1.0,
+      "evictions": 0,
+      "bytes": 131327560
+    },
+    {
+      "workers": 8,
+      "reqs": 2000,
+      "ops": 32000,
+      "dur": 24.074744333018316,
+      "thr": 1329.1937624489021,
+      "lat_avg": 5983.064293983086,
+      "lat_p95": 8352.042,
+      "hits": 6251,
+      "misses": 6601,
+      "hit_rate": 0.4863834422657952,
+      "evictions": 10339,
+      "bytes": 252090150
+    }
+  ]
+}

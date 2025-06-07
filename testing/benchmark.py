@@ -211,6 +211,7 @@ def _save_json(config: Dict, stages: List[Dict], prefix: str) -> None:
 
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
     out_path = out_dir / f"{prefix}_{ts}.json"
+    print(f"💾 Saving results to → {out_path}")
 
     payload = {"config": config, "stages": stages}
     out_path.write_text(json.dumps(payload, indent=2))
@@ -278,5 +279,34 @@ def _make_plots(results: List[Dict], *, prefix: str = "") -> None:
     plt.ylabel("MB")
     plt.grid(True)
     _save(fig5, "memory")
+
+    # 1 ─ Latency CDF (per stage)
+    fig6 = plt.figure()
+    for r in results:
+        sorted_lat = sorted(r["lat_dist"]) if "lat_dist" in r else []
+        if not sorted_lat:
+            continue
+        y = [i / len(sorted_lat) * 100 for i in range(len(sorted_lat))]
+        plt.plot(sorted_lat, y, label=f'{r["workers"]} workers')
+    plt.title("Latency CDF")
+    plt.xlabel("µs")
+    plt.ylabel("Percentile")
+    plt.grid(True)
+    plt.legend()
+    _save(fig6, "latency_cdf")
+
+    # 3 ─ Throughput vs. Hit-Rate scatter
+    fig8 = plt.figure()
+    thr = [r["thr"] for r in results]
+    hit = [r["hit_rate"] * 100 for r in results]
+    plt.scatter(hit, thr)
+    plt.title("Throughput vs. Hit Rate")
+    plt.xlabel("Hit Rate (%)")
+    plt.ylabel("Ops/s")
+    plt.grid(True)
+    for txt, x, y in zip([r["workers"] for r in results], hit, thr):
+        plt.annotate(txt, (x, y))
+    _save(fig8, "thr_vs_hit")
+
 
     plt.show()
